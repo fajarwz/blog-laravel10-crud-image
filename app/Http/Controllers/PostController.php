@@ -41,10 +41,8 @@ class PostController extends Controller
 
         if ($request->hasFile('featured_image')) {
             // put image in the public storage
-            $file = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'), 'public');
-            // get the image path in the url
-            $path = Storage::url($file);
-            $validated['featured_image'] = $path;
+            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'));
+            $validated['featured_image'] = $filePath;
         }
 
         // insert only requests that already validated in the StoreRequest
@@ -88,14 +86,11 @@ class PostController extends Controller
         $validated = $request->validated();
 
         if ($request->hasFile('featured_image')) {
-            // get current image path and replace the storage path with public path
-            $currentImage = str_replace('/storage', '/public', $post->featured_image);
-            // delete current image
-            Storage::delete($currentImage);
+            // delete image
+            Storage::disk('public')->delete($post->featured_image);
 
-            $file = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'), 'public');
-            $path = Storage::url($file);
-            $validated['featured_image'] = $path;
+            $filePath = Storage::disk('public')->put('images/posts/featured-images', request()->file('featured_image'), 'public');
+            $validated['featured_image'] = $filePath;
         }
 
         $update = $post->update($validated);
@@ -115,8 +110,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
-        $currentImage = str_replace('/storage', '/public', $post->featured_image);
-        Storage::delete($currentImage);
+        Storage::disk('public')->delete($post->featured_image);
         
         $delete = $post->delete($id);
 
