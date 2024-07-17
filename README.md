@@ -46,3 +46,8 @@ Open new console and run the app with Vite
 ```
 npm run dev
 ```
+
+## Test App
+```
+php artisan test
+```

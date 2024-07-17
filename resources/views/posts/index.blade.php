@@ -22,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @foreach ($posts as $post)
+                            @forelse ($posts as $post)
                                 <tr>
                                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $post->title }}</td>
                                     <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $post->created_at }}</td>
@@ -37,7 +37,11 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">No data can be displayed.</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
